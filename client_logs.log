@@ -38,3 +38,11 @@ KeyboardInterrupt
 2025-03-05 15:54:11,899 - INFO - Disconnected from Camera 6
 2025-03-05 15:54:11,899 - INFO - Disconnected from Camera 2
 2025-03-05 15:54:11,899 - INFO - Disconnected from Camera 0
+2025-03-05 16:12:25,985 - INFO - Connected to WebSocket for Camera 0
+2025-03-05 16:12:25,985 - INFO - Connected to WebSocket for Camera 2
+2025-03-05 16:12:25,985 - INFO - Connected to WebSocket for Camera 4
+2025-03-05 16:12:25,986 - INFO - Connected to WebSocket for Camera 6
+2025-03-05 16:15:38,386 - INFO - Disconnected from Camera 2
+2025-03-05 16:15:38,386 - INFO - Disconnected from Camera 0
+2025-03-05 16:15:38,387 - INFO - Disconnected from Camera 4
+2025-03-05 16:15:38,387 - INFO - Disconnected from Camera 6
