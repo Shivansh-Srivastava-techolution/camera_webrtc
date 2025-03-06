@@ -1,37 +1,28 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from services.camera.camera_service import CameraService
-from services.camera.config import CAMERA_CONFIGS
-import logging
-
-# Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+from services.motion.motion_service import MotionService
+from services.motion.config import MOTION_CONFIG
 
 router = APIRouter()
 
-camera_services = {
-    cam_id: CameraService(
-        source=config["source"], 
-        frame_width=config["frame_width"], 
-        frame_height=config["frame_height"], 
-        fps=config["fps"]
-    ) for cam_id, config in CAMERA_CONFIGS.items()
+motion_services = {
+    0: MotionService(source=MOTION_CONFIG['source'], 
+                    frame_width=MOTION_CONFIG['frame_width'], 
+                    frame_height=MOTION_CONFIG['frame_width'], 
+                    fps=MOTION_CONFIG['fps']),
 }
 
-@router.websocket("/ws/{cam_id}")
-async def stream_camera(websocket: WebSocket, cam_id: int):
-    """ WebSocket endpoint for real-time streaming """
+@router.websocket("/ws/motion/{cam_id}")
+async def stream_motion_camera(websocket: WebSocket, cam_id: int):
+    """ WebSocket endpoint for motion-based streaming """
     await websocket.accept()
-    logging.info(f"WebSocket connection opened for Camera {cam_id}")
-
-    if cam_id not in camera_services:
-        logging.warning(f"Invalid camera ID requested: {cam_id}")
+    if cam_id not in motion_services:
         await websocket.send_text("Invalid camera ID")
         await websocket.close()
         return
 
-    camera = camera_services[cam_id]
+    camera = motion_services[cam_id]
     
     try:
         await camera.stream_frames(websocket)
     except WebSocketDisconnect:
-        logging.info(f"WebSocket disconnected for Camera {cam_id}")
+        print(f"WebSocket disconnected for Motion Camera {cam_id}")
