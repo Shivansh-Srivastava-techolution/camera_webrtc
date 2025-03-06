@@ -13514,3 +13514,7 @@
 2025-03-05 16:23:46,978 - ERROR - Error encoding/sending frame: Cannot call "send" once a close message has been sent.
 2025-03-05 16:23:46,983 - ERROR - Error encoding/sending frame: Cannot call "send" once a close message has been sent.
 2025-03-05 16:23:46,990 - ERROR - Error encoding/sending frame: Cannot call "send" once a close message has been sent.
+2025-03-06 19:20:28,550 - INFO - Camera 0 - Resolution: 1920.0x1080.0, FPS: 30.0
+2025-03-06 19:20:28,562 - INFO - Camera 2 - Resolution: 0.0x0.0, FPS: 0.0
+2025-03-06 19:20:28,572 - INFO - Camera 4 - Resolution: 0.0x0.0, FPS: 0.0
+2025-03-06 19:20:28,582 - INFO - Camera 6 - Resolution: 0.0x0.0, FPS: 0.0

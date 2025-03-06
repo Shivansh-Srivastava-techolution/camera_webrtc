@@ -1,4 +1,4 @@
-#!/home/tech/Desktop/multi_cam_setup/venv/bin/python3
+#!/Users/shivanshshrivastava/Desktop/camera_webrtc/venv/bin/python3.13
 # -*- coding: utf-8 -*-
 import re
 import sys
