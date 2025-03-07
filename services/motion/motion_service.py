@@ -22,7 +22,7 @@ class MotionService:
         self.init_camera()
         logging.info(f"Camera {source} - Resolution: {self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)}x{self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)}, FPS: {self.cap.get(cv2.CAP_PROP_FPS)}")
         self.resolution = (f"{self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)}x{self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)}")
-        self.motion_detection = MotionDetection(fps)
+        self.motion_detection = MotionDetection(self.cap.get(cv2.CAP_PROP_FPS))
 
     def init_camera(self):
         self.cap = cv2.VideoCapture(self.source)

@@ -6,7 +6,7 @@ import cv2
 import time
 
 async def receive_motion_frames():
-    uri = "ws://localhost:8001/motion/ws/motion/0"
+    uri = "ws://192.168.20.105:8001/motion/ws/motion/0"
     last_frame_time = time.time()  # Track last received frame time
 
     async with websockets.connect(uri) as websocket:
