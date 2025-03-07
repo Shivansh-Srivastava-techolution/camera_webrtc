@@ -143,7 +143,7 @@ class MotionDetection:
             raise e
 
    
-    def update_motion_status(self, frame, mask):
+    def update_motion_status(self, frame, mask = None):
         """
         Update motion detection with a new frame.
         
@@ -153,6 +153,8 @@ class MotionDetection:
         """
         
         # self.previous_motion_detected = self.motion_detected
+        if mask is None:
+            mask = np.ones(frame.shape[:2], dtype=np.uint8) * 255
         masked_frame = cv2.bitwise_and(frame, frame, mask=mask)
         
         # Directly detect motion on the masked frame

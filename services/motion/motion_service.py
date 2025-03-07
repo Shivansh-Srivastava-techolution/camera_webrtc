@@ -42,7 +42,7 @@ class MotionService:
                     break
 
                 # Detect motion
-                self.motion_detection.update_motion_status(frame)
+                self.motion_detection.update_motion_status(frame, None)
 
                 if self.motion_detection.motion_detected:
                     # Calculate FPS
@@ -55,7 +55,7 @@ class MotionService:
 
                     # Send frame when motion is detected
                     await self.send_frame(websocket, frame)
-
+        
                 await asyncio.sleep(1 / self.fps)  # Approx 30 FPS
                 
         except Exception as e:

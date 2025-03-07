@@ -1,12 +1,12 @@
 # main.py
 
 from fastapi import FastAPI
-from routers import camera_router
+from routers import motion_router
 
-app = FastAPI(title="Multi-Camera WebSocket & HTTP Streaming")
+app = FastAPI(title="Multi-Camera WebSocket Streaming")
 
 # Include the camera router
-app.include_router(camera_router.router, prefix="/camera")
+app.include_router(motion_router.router, prefix="/motion")
 
 if __name__ == "__main__":
     import uvicorn

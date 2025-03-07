@@ -7,7 +7,7 @@ router = APIRouter()
 motion_services = {
     0: MotionService(source=MOTION_CONFIG['source'], 
                     frame_width=MOTION_CONFIG['frame_width'], 
-                    frame_height=MOTION_CONFIG['frame_width'], 
+                    frame_height=MOTION_CONFIG['frame_height'], 
                     fps=MOTION_CONFIG['fps']),
 }
 

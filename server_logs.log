@@ -13518,3 +13518,7 @@
 2025-03-06 19:20:28,562 - INFO - Camera 2 - Resolution: 0.0x0.0, FPS: 0.0
 2025-03-06 19:20:28,572 - INFO - Camera 4 - Resolution: 0.0x0.0, FPS: 0.0
 2025-03-06 19:20:28,582 - INFO - Camera 6 - Resolution: 0.0x0.0, FPS: 0.0
+2025-03-07 16:12:27,497 - INFO - Camera 0 - Resolution: 1920.0x1080.0, FPS: 30.0
+2025-03-07 16:12:27,511 - INFO - Camera 2 - Resolution: 0.0x0.0, FPS: 0.0
+2025-03-07 16:12:27,524 - INFO - Camera 4 - Resolution: 0.0x0.0, FPS: 0.0
+2025-03-07 16:12:27,538 - INFO - Camera 6 - Resolution: 0.0x0.0, FPS: 0.0
