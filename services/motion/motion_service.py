@@ -5,6 +5,7 @@ import logging
 import time
 from starlette.websockets import WebSocket
 from services.motion.motion_detection import MotionDetection
+from services.camera.utils import configure_camera
 
 logging.basicConfig(level=logging.INFO)
 
@@ -14,14 +15,19 @@ BASE64_CHUNK_SIZE = (CHUNK_SIZE * 4) // 3  # Adjust for Base64 expansion
 class MotionService:
     def __init__(self, source, frame_width, frame_height, fps):
         self.source = source
-        self.cap = cv2.VideoCapture(source)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, frame_width)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, frame_height)
-        self.cap.set(cv2.CAP_PROP_FPS, fps)
-        logging.info(f"Camera {source} - Resolution: {self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)}x{self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)}, FPS: {self.cap.get(cv2.CAP_PROP_FPS)}")
+        self.frame_width = frame_width
+        self.frame_height = frame_height
         self.fps = fps
+        self.cap = None
+        self.init_camera()
+        logging.info(f"Camera {source} - Resolution: {self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)}x{self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)}, FPS: {self.cap.get(cv2.CAP_PROP_FPS)}")
         self.resolution = (f"{self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)}x{self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)}")
         self.motion_detection = MotionDetection(fps)
+
+    def init_camera(self):
+        self.cap = cv2.VideoCapture(self.source)
+        configure_camera(self.cap, self.frame_width, self.frame_height, self.fps)
+        
 
     async def stream_frames(self, websocket: WebSocket):
         """ Stream frames only when motion is detected """
