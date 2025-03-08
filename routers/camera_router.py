@@ -1,6 +1,8 @@
+import asyncio
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from services.camera_service import CameraService
-from services.config import CAMERA_CONFIGS
+from services.camera.camera_service import CameraService
+from core.config import CONFIG
+from services.camera.config import CAMERA_CONFIGS
 import logging
 
 # Configure logging
@@ -8,30 +10,41 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 router = APIRouter()
 
-camera_services = {
-    cam_id: CameraService(
-        source=config["source"], 
-        frame_width=config["frame_width"], 
-        frame_height=config["frame_height"], 
-        fps=config["fps"]
-    ) for cam_id, config in CAMERA_CONFIGS.items()
-}
 
-@router.websocket("/ws/{cam_id}")
-async def stream_camera(websocket: WebSocket, cam_id: int):
-    """ WebSocket endpoint for real-time streaming """
+camera_id = CONFIG['camera_id']
+# Initialize a new camera service dynamically for each request
+camera = CameraService(
+    source=CAMERA_CONFIGS[camera_id]["source"],
+    frame_width=CAMERA_CONFIGS[camera_id]["frame_width"],
+    frame_height=CAMERA_CONFIGS[camera_id]["frame_height"],
+    fps=CAMERA_CONFIGS[camera_id]["fps"]
+)
+
+@router.websocket("/{cam_id}")
+async def stream_camera(websocket: WebSocket, cam_id: str):
+    """ WebSocket endpoint for real-time camera streaming """
+
+    cam_id = int(cam_id)  # Convert cam_id from string to int
     await websocket.accept()
-    logging.info(f"WebSocket connection opened for Camera {cam_id}")
+    client_ip = websocket.client.host if websocket.client else "Unknown"
+    logging.info(f"WebSocket connection opened for Camera {cam_id} from {client_ip}")
 
-    if cam_id not in camera_services:
+    # Validate camera ID
+    if cam_id != camera_id:
         logging.warning(f"Invalid camera ID requested: {cam_id}")
         await websocket.send_text("Invalid camera ID")
         await websocket.close()
         return
 
-    camera = camera_services[cam_id]
-    
     try:
-        await camera.stream_frames(websocket)
+        # Start both capture_frames (producer) and stream_frames (consumer) concurrently
+        capture_task = asyncio.create_task(camera.capture_frames())  # Produces frames
+        stream_task = asyncio.create_task(camera.stream_frames(websocket))  # Consumes frames
+        
+        await asyncio.gather(capture_task, stream_task)  # Run both tasks together
     except WebSocketDisconnect:
-        logging.info(f"WebSocket disconnected for Camera {cam_id}")
+        logging.info(f"WebSocket disconnected for Camera {camera_id} from {client_ip}")
+    finally:
+        # Ensure camera resource is always released
+        camera.cap.release()
+        logging.info(f"Camera {camera_id} resource released")
